@@ -15,13 +15,14 @@ class ConnectionNameSpace(socketio.Namespace):
     def on_connect(self, sid, environ):
         print('connected')
         print (self.namespace)
+        self.enter_room(sid, self.namespace)
 
     def on_disconnect(self, sid):
-        pass
+        self.leave_room(sid, self.namespace)
 
     def on_frame(self, sid, data):
         print ('frame')
-        #self.emit('my_response', data)
+        self.emit('new_frame', data, room = self.namespace, skip_sid = sid)
 
 device1 = ConnectionNameSpace('/device1')
 device2 = ConnectionNameSpace('/device2')
